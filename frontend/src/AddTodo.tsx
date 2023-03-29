@@ -12,6 +12,7 @@ export default function AddTodo(props: AddTodoProps) {
 
     const [description, setDescription] = useState<string>('')
 
+    // useNavigate hook von React-Router ermöglicht uns programmtisch zu navigieren
     const navigate = useNavigate()
 
 
@@ -21,6 +22,8 @@ export default function AddTodo(props: AddTodoProps) {
         const newTodo: NewTodo = {description: description, status: 'OPEN'}
 
         props.addTodo(newTodo)
+
+        // nutzt den useNavigate hook um uns auf andere Seiten zu navigieren
         navigate('/todos')
     }
 

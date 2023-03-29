@@ -8,6 +8,8 @@ export default function Header() {
     return (
         <div>
             <Typography variant='h1'>Todo Board</Typography>
+
+            {/*Komponenten von React Router zum Navigieren*/}
             <Link to='/todos'>Todos</Link>
             <NavLink to='/todos/add'>Add</NavLink>
         </div>

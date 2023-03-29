@@ -9,6 +9,8 @@ import {Typography} from "@mui/material";
 export default function TodoDetail() {
 
     const [todo, setTodo] = useState<Todo>()
+
+    // useParams hook von react-router, nutzen wir um Pfadvariabel aus der url auszulesen
     const {id} = useParams<{ id: string }>()
 
     useEffect(() => {
