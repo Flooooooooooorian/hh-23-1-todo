@@ -17,6 +17,7 @@ export default function TodoDetail() {
         if (id) {
             loadTodoById(id)
         }
+        //eslint-disable-next-line
     }, [])
 
     function loadTodoById(id: string) {
