@@ -8,9 +8,13 @@ import useTodos from "./useTodos";
 import {ToastContainer} from "react-toastify";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import TodoDetail from "./TodoDetail";
+import LoginPage from "./LoginPage";
+import useUser from "./useUser";
+import ProtectedRoutes from "./ProtectedRoutes";
 
 function App() {
 
+    const {user, login} = useUser()
     const {todos, addTodo, deleteTodo, updateTodo} = useTodos()
 
     return (
@@ -22,17 +26,22 @@ function App() {
 
                 {/*routes Gruppierung von Routen, kann es mehrere von geben*/}
                 <Routes>
-                    {/*Route eine Unterseite auf unserer Seite*/}
-                    <Route element={<Navigate to='/todos'/>}/>
+                    <Route path='/login' element={<LoginPage onLogin={login}/>}/>
 
-                    {/*    path gibt die url der Seite an*/}
-                    {/*element geben wir was auf dieser Seite dargestellt werden soll*/}
-                    <Route path='/todos'
-                           element={<TodoGallery todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo}/>}/>
-                    <Route path='/todos/add'
-                           element={<AddTodo addTodo={addTodo}/>}/>
-                    {/*                 :variabel können dynamische Pfadvariabeln angeben */}
-                    <Route path='/todos/:id' element={<TodoDetail />}/>
+                    {/*Alle Routen für die man eingeloggt sein muss*/}
+                    <Route element={<ProtectedRoutes user={user}/>}>
+                        {/*Route eine Unterseite auf unserer Seite*/}
+                        <Route element={<Navigate to='/todos'/>}/>
+
+                        {/*    path gibt die url der Seite an*/}
+                        {/*element geben wir was auf dieser Seite dargestellt werden soll*/}
+                        <Route path='/todos'
+                               element={<TodoGallery todos={todos} updateTodo={updateTodo} deleteTodo={deleteTodo}/>}/>
+                        <Route path='/todos/add'
+                               element={<AddTodo addTodo={addTodo}/>}/>
+                        {/*                 :variabel können dynamische Pfadvariabeln angeben */}
+                        <Route path='/todos/:id' element={<TodoDetail/>}/>
+                    </Route>
                 </Routes>
             </div>
         </BrowserRouter>

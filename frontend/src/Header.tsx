@@ -12,6 +12,7 @@ export default function Header() {
             {/*Komponenten von React Router zum Navigieren*/}
             <Link to='/todos'>Todos</Link>
             <NavLink to='/todos/add'>Add</NavLink>
+            <NavLink to='/login'>Login</NavLink>
         </div>
     )
 }

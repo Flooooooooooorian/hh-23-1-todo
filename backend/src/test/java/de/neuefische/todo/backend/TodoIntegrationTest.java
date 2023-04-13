@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +28,7 @@ public class TodoIntegrationTest {
     ObjectMapper objectMapper;
 
     @Test
+    @WithMockUser
     void expectEmptyListOnGet() throws Exception {
         mockMvc.perform(get("http://localhost:8080/api/todo"))
                 .andExpect(status().isOk())
@@ -34,8 +37,15 @@ public class TodoIntegrationTest {
                         """));
     }
 
+    @Test
+    void expect401_OnGet_whenAnonymousUser() throws Exception {
+        mockMvc.perform(get("http://localhost:8080/api/todo"))
+                .andExpect(status().isUnauthorized());
+    }
+
     @DirtiesContext
     @Test
+    @WithMockUser
     void expectSuccessfulPost() throws Exception {
         String actual = mockMvc.perform(
                         post("http://localhost:8080/api/todo")
@@ -43,6 +53,7 @@ public class TodoIntegrationTest {
                                 .content("""
                                         {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
                                         """)
+                                .with(csrf())
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -62,6 +73,7 @@ public class TodoIntegrationTest {
 
     @DirtiesContext
     @Test
+    @WithMockUser
     void expectSuccessfulPut() throws Exception {
         String saveResult = mockMvc.perform(
                         post("http://localhost:8080/api/todo")
@@ -69,6 +81,7 @@ public class TodoIntegrationTest {
                                 .content("""
                                         {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
                                         """)
+                                .with(csrf())
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -90,6 +103,7 @@ public class TodoIntegrationTest {
                                 .content("""
                                         {"id":"<ID>","description":"Bla","status":"IN_PROGRESS"}
                                         """.replaceFirst("<ID>", id))
+                                .with(csrf())
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
@@ -104,6 +118,7 @@ public class TodoIntegrationTest {
 
     @DirtiesContext
     @Test
+    @WithMockUser
     void expectSuccessfulDelete() throws Exception {
         String saveResult = mockMvc.perform(
                         post("http://localhost:8080/api/todo")
@@ -111,6 +126,7 @@ public class TodoIntegrationTest {
                                 .content("""
                                         {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
                                         """)
+                                .with(csrf())
                 )
                 .andReturn()
                 .getResponse()
@@ -119,7 +135,8 @@ public class TodoIntegrationTest {
         Todo saveResultTodo = objectMapper.readValue(saveResult, Todo.class);
         String id = saveResultTodo.id();
 
-        mockMvc.perform(delete("http://localhost:8080/api/todo/" + id))
+        mockMvc.perform(delete("http://localhost:8080/api/todo/" + id)
+                        .with(csrf()))
                 .andExpect(status().isOk());
 
         mockMvc.perform(get("http://localhost:8080/api/todo"))
@@ -131,6 +148,7 @@ public class TodoIntegrationTest {
 
     @DirtiesContext
     @Test
+    @WithMockUser
     void expectTodoOnGetById() throws Exception {
         String actual = mockMvc.perform(
                         post("http://localhost:8080/api/todo")
@@ -138,6 +156,7 @@ public class TodoIntegrationTest {
                                 .content("""
                                         {"description":"Nächsten Endpunkt implementieren","status":"OPEN"}
                                         """)
+                                .with(csrf())
                 )
                 .andExpect(status().isOk())
                 .andExpect(content().json("""
