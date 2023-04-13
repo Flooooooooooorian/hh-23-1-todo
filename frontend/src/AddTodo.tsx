@@ -19,6 +19,11 @@ export default function AddTodo(props: AddTodoProps) {
     function onSaveTodo(event: FormEvent<HTMLFormElement>) {
         event.preventDefault()
 
+        if (description === undefined || description === '') {
+            console.error("Description requierd")
+            return
+        }
+
         const newTodo: NewTodo = {description: description, status: 'OPEN'}
 
         props.addTodo(newTodo)
@@ -31,6 +36,7 @@ export default function AddTodo(props: AddTodoProps) {
         <div>
             <form onSubmit={onSaveTodo}>
                 <TextField label='Description'
+                           required
                            value={description}
                            onChange={(event) => {
                                setDescription(event.target.value)
