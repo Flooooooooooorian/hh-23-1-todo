@@ -41,6 +41,14 @@ export default function AddTodo(props: AddTodoProps) {
                            onChange={(event) => {
                                setDescription(event.target.value)
                            }}/>
+                <TextField type="number"/>
+                <TextField type="file"/>
+                <TextField type="date"/>
+                <select>
+                    <option>Test</option>
+                    <option>Test1</option>
+                    <option>Test2</option>
+                </select>
                 <Button className='mybutton' variant='contained' color="success" type='submit'>Save</Button>
             </form>
         </div>
