@@ -38,6 +38,7 @@ export default function TodoCard(props: Props) {
             <Typography>{props.todo.description}</Typography>
             <Typography>{props.todo.status}</Typography>
             <Typography>{props.todo.id}</Typography>
+            <img src={props.todo.url} alt='Todo Image' width={200}/>
             <Button onClick={() => {navigate('/todos/' + props.todo.id)}}>Details</Button>
             {props.todo.status !== 'DONE' && <Button onClick={onAdvanceClick}>Advance</Button>}
             {props.todo.status === 'DONE' && <Button onClick={onDeleteClick}>Delete</Button>}

@@ -8,18 +8,23 @@ public record Todo(
         @NotBlank
         @Size(min = 3, max = 32)
         String description,
-        TodoStatus status
+        TodoStatus status,
+        String url
 ) {
 
     Todo(
             String description,
             TodoStatus status
     ) {
-        this(null, description, status);
+        this(null, description, status, null);
     }
 
 
     public Todo withId(String id) {
-        return new Todo(id, description, status);
+        return new Todo(id, description, status, url);
+    }
+
+    public Todo withUrl(String url) {
+        return new Todo(id, description, status, url);
     }
 }

@@ -13,7 +13,7 @@ class TodoServiceTest {
 
     TodoRepository todoRepository = mock(TodoRepository.class);
 
-    TodoService todoService = new TodoService(todoRepository);
+    TodoService todoService = new TodoService(todoRepository, cloudinaryService);
 
     @Test
     void getAllCallsRepository() {

@@ -17,8 +17,19 @@ export default function useTodos() {
             .catch((error) => {console.error(error)})
     }
 
-    function addTodo(newTodo: NewTodo) {
-        axios.post("/api/todo", newTodo)
+    function addTodo(newTodo: NewTodo, image: File | undefined) {
+
+        const data = new FormData()
+
+        if (image) {
+            data.append("file", image)
+        }
+
+        data.append("data", new Blob([JSON.stringify(newTodo)], {'type': "application/json"}))
+
+
+
+        axios.post("/api/todo", data)
             .then((addTodoResponse) => {
                 //            [] wir erstellen eine neue Liste
                 //              ... (spreading) wir nehmen alle Elemente der alten Liste und fügen sie in die neue ein
