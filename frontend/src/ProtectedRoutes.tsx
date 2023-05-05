@@ -6,7 +6,7 @@ type Props = {
 
 export default function ProtectedRoutes(props: Props) {
 
-    const authenticated = props.user !== undefined && props.user !== 'anonymousUser'
+    const authenticated = props.user !== undefined
 
     //                  Zeigt alle Unter Routen
     return (

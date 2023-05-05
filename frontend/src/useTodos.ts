@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 import {NewTodo, Todo} from "./Todo";
-import axios from "axios";
+import axios, {AxiosRequestConfig} from "axios";
 import {toast} from "react-toastify";
 
-export default function useTodos() {
+export default function useTodos(token: string | undefined) {
 
     const [todos, setTodos] = useState<Todo[]>([])
 
@@ -11,14 +11,16 @@ export default function useTodos() {
         loadAllTodos()
     }, [])
 
+    const axiosConfig: AxiosRequestConfig = token ? {headers: {Authorization: "Bearer " + token}} : {}
+
     function loadAllTodos() {
-        axios.get("/api/todo")
+        axios.get("/api/todo", axiosConfig)
             .then((getAllTodosResponse) => {setTodos(getAllTodosResponse.data)})
             .catch((error) => {console.error(error)})
     }
 
     function addTodo(newTodo: NewTodo) {
-        axios.post("/api/todo", newTodo)
+        axios.post("/api/todo", newTodo, axiosConfig)
             .then((addTodoResponse) => {
                 //            [] wir erstellen eine neue Liste
                 //              ... (spreading) wir nehmen alle Elemente der alten Liste und fügen sie in die neue ein
@@ -31,7 +33,7 @@ export default function useTodos() {
     }
 
     function updateTodo(todo: Todo) {
-        axios.put(`/api/todo/${todo.id}`, todo)
+        axios.put(`/api/todo/${todo.id}`, todo, axiosConfig)
             .then((putTodoResponse) => {
                 //Wir wollen das alte Todo ersetzen, alle anderen sollen gleich bleiben
                 setTodos(todos.map(currentTodo => {
@@ -50,7 +52,7 @@ export default function useTodos() {
     }
 
     function deleteTodo(id: string) {
-        axios.delete('/api/todo/' + id)
+        axios.delete('/api/todo/' + id, axiosConfig)
             .then(() => {
                 setTodos(todos.filter((todo) => todo.id !== id))
             })

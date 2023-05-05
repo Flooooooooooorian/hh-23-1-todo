@@ -3,14 +3,14 @@ import axios from "axios";
 
 
 export default function useUser() {
-    const [user, setUser] = useState<string>()
+    const [token, setToken] = useState<string>()
 
     function login(username: string, password: string) {
-        return axios.post("/api/users/login", undefined, {auth: {username, password}})
+        return axios.post("/api/users/login", {username, password}, )
             .then(response => {
-                setUser(response.data)
+                setToken(response.data)
             })
     }
 
-    return {user, login}
+    return {token, login}
 }
