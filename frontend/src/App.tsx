@@ -14,8 +14,8 @@ import ProtectedRoutes from "./ProtectedRoutes";
 
 function App() {
 
-    const {user, login} = useUser()
-    const {todos, addTodo, deleteTodo, updateTodo} = useTodos()
+    const {token, login} = useUser()
+    const {todos, addTodo, deleteTodo, updateTodo} = useTodos(token)
 
     return (
         //BrowserRouter 1mal pro Projekt, kümmert sich um die ganze navigierung
@@ -29,7 +29,7 @@ function App() {
                     <Route path='/login' element={<LoginPage onLogin={login}/>}/>
 
                     {/*Alle Routen für die man eingeloggt sein muss*/}
-                    <Route element={<ProtectedRoutes user={user}/>}>
+                    <Route element={<ProtectedRoutes user={token}/>}>
                         {/*Route eine Unterseite auf unserer Seite*/}
                         <Route element={<Navigate to='/todos'/>}/>
 
